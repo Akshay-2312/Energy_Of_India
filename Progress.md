@@ -30,7 +30,7 @@
     - `gold_state_energy` (`127,590` rows unpivoting daily energy, peak met, and peak unmet to `(Date, State)` and merging `Dadra and Nagar Haveli` + `Daman and Diu`).
     - `gold_energy_weather` (`127,590` rows, `27,157` with weather via left join so `2013–2021` history is preserved + `Has_Weather` flag).
     - `gold_monthly_summary` (`135` rows) and `gold_state_monthly_summary` (`4,416` rows).
-- Verified the full rewritten pipeline locally with PySpark 4 (ANSI mode) against the 4 raw CSVs.
+- Verified the full rewritten pipeline locally with PySpark 4 (ANSI mode) against the 4 raw CSVs **and deployed/executed the full 22-table `Energy_Of_India_Pipeline` + `smart/EDA.py` on Databricks (`workspace.default`, `0` errors, `0` warnings)**, with execution screenshots saved under `docs/screenshots/`.
 
 ### C. Local Gold Export & Power BI Interactive Project (`powerbi/`)
 - Built `powerbi/export_gold.py` to execute the pipeline locally and export **9 flat UTF-8 CSVs** into `powerbi/data/` (`0` duplicate keys, `0` orphan states).

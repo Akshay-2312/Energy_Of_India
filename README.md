@@ -129,7 +129,25 @@ Separates non-state utilities and national totals from state-level facts, merges
 
 ---
 
-## 4. Power BI Interactive Dashboard (`powerbi/GridPulse.pbip`)
+## 4. Databricks Cloud Execution Proof (`workspace.default`)
+
+All 4 raw datasets were uploaded to Databricks Unity Catalog Volume `/Volumes/workspace/default/smartgrid_raw/{zenodo,open_meteo}/`, and both the **22-table Lakeflow Declarative Pipeline (`Energy_Of_India_Pipeline`)** and the **735-line PySpark EDA & Verification Notebook (`smart/EDA.py`)** executed end-to-end with **0 errors and 0 warnings**:
+
+### A. Lakeflow Declarative Pipeline DAG (22 Bronze $\rightarrow$ Silver $\rightarrow$ Gold Delta Tables)
+![Lakeflow Declarative Pipeline DAG](./docs/screenshots/03_lakeflow_pipeline_dag_graph.jpg)
+
+### B. Pipeline Execution Summary (`22` Materialized Tables, `0` Errors)
+![Lakeflow Pipeline Tables Execution](./docs/screenshots/02_lakeflow_pipeline_tables_22.jpg)
+
+### C. PySpark EDA & Gold Table Verification Notebook (`smart/EDA.py`)
+![Databricks EDA Notebook Execution](./docs/screenshots/04_databricks_eda_notebook_run.jpg)
+
+### D. Unity Catalog Volume Raw Storage (`/Volumes/workspace/default/smartgrid_raw/`)
+![Unity Catalog Volume Raw Storage](./docs/screenshots/01_unity_catalog_volume_zenodo.jpg)
+
+---
+
+## 5. Power BI Interactive Dashboard (`powerbi/GridPulse.pbip`)
 
 Built in source-controlled **PBIP** format (**TMDL** semantic model + **PBIR** report definition) and styled with the **Hallmark Editorial Almanac** design system:
 
