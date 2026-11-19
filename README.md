@@ -1,9 +1,9 @@
-# GridPulse India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics
+# Energy_Of_India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics
 
 **Domain #7:** Energy – Smart Electricity Consumption Analytics  
 **Stack:** Python • Apache Spark (PySpark 4) • Databricks Lakeflow Declarative Pipelines (`dlt`) • Delta Lake • Unity Catalog • Power BI Project (`PBIP` / `TMDL` / `PBIR`)
 
-![GridPulse India Architecture Diagram](./architecture_diagram.svg)
+![Energy_Of_India Architecture Diagram](./architecture_diagram.svg)
 
 ---
 
@@ -150,7 +150,7 @@ Built in source-controlled **PBIP** format (**TMDL** semantic model + **PBIR** r
 ## 5. Repository Structure
 
 ```text
-GridPulse_India/
+Energy_Of_India/
 ├── README.md                                   # Project overview, architecture, lineage & runbook
 ├── architecture_diagram.svg                    # Standalone vector architecture diagram (Deliverable #8)
 ├── ProblemStatement.txt                        # Project title, domain context & 3-layer objectives

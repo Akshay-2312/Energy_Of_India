@@ -1,5 +1,5 @@
 Project Title
-GridPulse India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics
+Energy_Of_India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics
 
 Problem Statement
 1. Real-World Context

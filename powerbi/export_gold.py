@@ -1,5 +1,5 @@
 """
-Reproducible local exporter for GridPulse India Gold & Audit tables.
+Reproducible local exporter for Energy_Of_India Gold & Audit tables.
 
 Runs smart/transformations/my_transformation.py locally using a lightweight
 fake `dlt` module and batch CSV reads on the four source CSVs in the repository

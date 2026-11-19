@@ -1,6 +1,6 @@
-# GridPulse India — Project Progress & Runbook
+# Energy_Of_India — Project Progress & Runbook
 
-**Project:** GridPulse India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics  
+**Project:** Energy_Of_India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics  
 **Source Brief:** `Data Engineering Projects Info_-.pdf` (Domain #7: Energy – Smart Electricity Consumption Analytics) & `ProblemStatement.txt`  
 **Submission Deadline:** **20 November 2026**  
 **Last Updated:** 2026-11-19
@@ -36,7 +36,7 @@
 - Built `powerbi/export_gold.py` to execute the pipeline locally and export **9 flat UTF-8 CSVs** into `powerbi/data/` (`0` duplicate keys, `0` orphan states).
 - Built the **PBIP** project (`powerbi/GridPulse.pbip`):
   - **Semantic Model (`powerbi/GridPulse.SemanticModel/` — TMDL):** `13` tables (including DAX `dim_date` marked Date table `2013-01-01..2024-12-31`, `dim_state`, `fact_energy_weather` with sorted `Temperature Band` / `Rainfall Band` / `Wind Band`, `fact_weather`, `fact_national_daily`, monthly summaries, data-quality tables, disconnected `'Weather Driver'` and `Metric` tables, and `_Measures`), `2` drill hierarchies (`Calendar Hierarchy`, `Location Hierarchy`), `10` relationships, `DataFolder` Power Query parameter, and `21` DAX measures.
-  - **Interactive Report (`powerbi/GridPulse.Report/` — PBIR):** `6` pages (`Overview`, `Weather & Demand`, `State Explorer`, hidden drill-through `State Detail`, `Unmet & Peak`, and `Data Quality`), `124` visuals, custom Hallmark Editorial Almanac theme (`gridpulse_theme.json`), compact `"GridPulse India"` header + one-line purpose subtitle + dynamic `[Header Context]` on every page, synced Date/Year/Season/Region/State/City/Weather-band slicers, `Weather Driver` and `Metric` choosers, cross-filtering, and cross-page `Reset filters` bookmarks.
+  - **Interactive Report (`powerbi/GridPulse.Report/` — PBIR):** `6` pages (`Overview`, `Weather & Demand`, `State Explorer`, hidden drill-through `State Detail`, `Unmet & Peak`, and `Data Quality`), `124` visuals, custom Hallmark Editorial Almanac theme (`gridpulse_theme.json`), compact `"Energy_Of_India"` header + one-line purpose subtitle + dynamic `[Header Context]` on every page, synced Date/Year/Season/Region/State/City/Weather-band slicers, `Weather Driver` and `Metric` choosers, cross-filtering, and cross-page `Reset filters` bookmarks.
 - Fixed PBIR schema/resource and live Desktop issues:
   - Updated `DataFolder` M parameter (`c:\mini project\smart\powerbi\data\`) and refreshed all 9 CSV-backed tables live via `pbi-cli`.
   - Replaced tenant-blocked Azure Map with a native `Regional demand share` Pie Chart (`pieChart`), replaced broken `lineStackedColumnComboChart` and single-dot `scatterChart` visuals with populated `clusteredColumnChart` / `clusteredBarChart` visuals, enabled all 18 measure columns across all 4 `tableEx` visuals, removed the `State Tooltip` page, aligned the `Data Quality` and `State Detail` grids to `1280×720`, and applied the Hallmark Editorial Almanac × Coral design system.
@@ -50,7 +50,7 @@
 | File / Folder | Role |
 |---|---|
 | `Data Engineering Projects Info_-.pdf` | Official project instructions, evaluation rules, 10 mandatory deliverables, and submission deadline (`20 Nov 2026`). |
-| `ProblemStatement.txt` | Defines the project title (*GridPulse India*), real-world context, Bronze/Silver data challenges, and 3-layer objective. |
+| `ProblemStatement.txt` | Defines the project title (*Energy_Of_India*), real-world context, Bronze/Silver data challenges, and 3-layer objective. |
 | `manifest.mf` | Databricks Lakeflow/DLT export metadata manifest (`guid` and format version). |
 | `all_india_weather.csv` | Raw Open-Meteo daily weather feed (`30,564` rows, `36` states/UTs + capital `Location` + lat/lon, `2022-01-01`..`2024-04-28`). |
 | `corrected_daily_energy_met_MU.csv` | Raw Zenodo wide-format daily electricity consumption in Million Units (`3,955` rows × `40` cols, `2013-01-01`..`2024-04-28`). |
@@ -93,7 +93,7 @@
 | `powerbi/GridPulse.Report/definition/pages/<page>/page.json` | Page layout (`1280×720`), Hallmark warm stone background (`#EFECE6`), and drill-through binding (`state_detail`). |
 | `powerbi/GridPulse.Report/definition/pages/<page>/visuals/*/visual.json` | Individual visual definitions (`124` visuals total: slicers, KPIs, bar/column/pie charts, matrix, tables, buttons). |
 | `powerbi/GridPulse.Report/definition/bookmarks/*.json` | 5 `Reset filters` bookmarks resetting slicers and choosers across all pages. |
-| `powerbi/GridPulse.Report/StaticResources/RegisteredResources/gridpulse_theme.json` | Custom Hallmark Editorial Almanac (`GridPulse Editorial Almanac`) Power BI report theme. |
+| `powerbi/GridPulse.Report/StaticResources/RegisteredResources/gridpulse_theme.json` | Custom Hallmark Editorial Almanac (`Energy_Of_India Editorial Almanac`) Power BI report theme. |
 | `powerbi/GridPulse.Report/StaticResources/SharedResources/BaseThemes/CY24SU06.json` | Bundled Microsoft base theme referenced by `report.json`. |
 
 ---

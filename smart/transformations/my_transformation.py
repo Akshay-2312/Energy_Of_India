@@ -1,5 +1,5 @@
 """
-GridPulse India - Medallion Lakehouse (Lakeflow Declarative Pipeline)
+Energy_Of_India - Medallion Lakehouse (Lakeflow Declarative Pipeline)
 
     Unity Catalog Volume (raw CSV)
         -> BRONZE  (4 Auto Loader streams, one per source file, raw strings)

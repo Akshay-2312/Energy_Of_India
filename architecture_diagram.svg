@@ -13,7 +13,7 @@
 
   <!-- Top Masthead Banner -->
   <rect x="28" y="24" width="1344" height="78" fill="#182232" rx="3"/>
-  <text x="52" y="57" fill="#FAF9F5" font-size="22" font-weight="700" letter-spacing="-0.3">GridPulse India — End-to-End Medallion Lakehouse Architecture</text>
+  <text x="52" y="57" fill="#FAF9F5" font-size="22" font-weight="700" letter-spacing="-0.3">Energy_Of_India — End-to-End Medallion Lakehouse Architecture</text>
   <text x="52" y="82" fill="#9DB2BF" font-size="13" font-weight="400">Weather-Driven Electricity Consumption, Peak Demand &amp; Grid Deficit Analytics  |  Apache Spark • Databricks Lakeflow (DLT) • Delta Lake • Power BI (PBIP / TMDL / PBIR)</text>
   <rect x="1176" y="42" width="172" height="40" fill="#C84B31" rx="2"/>
   <text x="1262" y="67" fill="#FAF9F5" font-size="12" font-weight="600" text-anchor="middle">Domain #7: Smart Energy</text>

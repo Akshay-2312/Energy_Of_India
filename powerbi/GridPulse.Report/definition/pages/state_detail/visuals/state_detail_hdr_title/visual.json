@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "GridPulse India",
+                    "value": "Energy_Of_India",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "14pt",
@@ -92,7 +92,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'GridPulse India report header and project purpose'"
+                  "Value": "'Energy_Of_India report header and project purpose'"
                 }
               }
             }

@@ -1,4 +1,4 @@
-# GridPulse India — Power BI Semantic Model & Report (`GridPulse.pbip`)
+# Energy_Of_India — Power BI Semantic Model & Report (`GridPulse.pbip`)
 
 Interactive Power BI Project (**PBIP** = **TMDL** semantic model + **PBIR** report) analyzing weather-driven electricity consumption, peak demand, and grid unmet demand (deficits) across India's states and Union Territories (`2013-01-01` to `2024-04-28`).
 
