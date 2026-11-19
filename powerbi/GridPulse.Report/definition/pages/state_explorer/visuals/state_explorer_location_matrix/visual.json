@@ -1,0 +1,473 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "state_explorer_location_matrix",
+  "position": {
+    "x": 16,
+    "y": 460,
+    "z": 19,
+    "height": 248,
+    "width": 1248,
+    "tabOrder": 19
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dim_state"
+                        }
+                      },
+                      "Hierarchy": "Location Hierarchy"
+                    }
+                  },
+                  "Level": "Region"
+                }
+              },
+              "queryRef": "dim_state.Location Hierarchy.Region",
+              "nativeQueryRef": "Region",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dim_state"
+                        }
+                      },
+                      "Hierarchy": "Location Hierarchy"
+                    }
+                  },
+                  "Level": "State"
+                }
+              },
+              "queryRef": "dim_state.Location Hierarchy.State",
+              "nativeQueryRef": "State",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dim_state"
+                        }
+                      },
+                      "Hierarchy": "Location Hierarchy"
+                    }
+                  },
+                  "Level": "City"
+                }
+              },
+              "queryRef": "dim_state.Location Hierarchy.City",
+              "nativeQueryRef": "City",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Total Energy (MU)"
+                }
+              },
+              "queryRef": "_Measures.Total Energy (MU)",
+              "nativeQueryRef": "Total Energy (MU)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Avg Daily Energy (MU)"
+                }
+              },
+              "queryRef": "_Measures.Avg Daily Energy (MU)",
+              "nativeQueryRef": "Avg Daily Energy (MU)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Peak Demand Met (MW)"
+                }
+              },
+              "queryRef": "_Measures.Peak Demand Met (MW)",
+              "nativeQueryRef": "Peak Demand Met (MW)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Peak Unmet (MW)"
+                }
+              },
+              "queryRef": "_Measures.Peak Unmet (MW)",
+              "nativeQueryRef": "Peak Unmet (MW)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Unmet Days"
+                }
+              },
+              "queryRef": "_Measures.Unmet Days",
+              "nativeQueryRef": "Unmet Days"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Avg Temperature (C)"
+                }
+              },
+              "queryRef": "_Measures.Avg Temperature (C)",
+              "nativeQueryRef": "Avg Temperature (C)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Total Rainfall (mm)"
+                }
+              },
+              "queryRef": "_Measures.Total Rainfall (mm)",
+              "nativeQueryRef": "Total Rainfall (mm)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Data Coverage %"
+                }
+              },
+              "queryRef": "_Measures.Data Coverage %",
+              "nativeQueryRef": "Data Coverage %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Measures"
+                  }
+                },
+                "Property": "Total Energy (MU)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Regional and state performance ledger'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FAF9F5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DCD8CF'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Expandable matrix with Region, State, and City hierarchy showing energy, peak, unmet, weather, and coverage metrics'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "0a1e5ca292d0eabeb8aa",
+        "field": {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_state"
+                  }
+                },
+                "Hierarchy": "Location Hierarchy"
+              }
+            },
+            "Level": "Region"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2d9e8a0ae0205d717404",
+        "field": {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_state"
+                  }
+                },
+                "Hierarchy": "Location Hierarchy"
+              }
+            },
+            "Level": "State"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "bf5322080d9243d0c1d5",
+        "field": {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_state"
+                  }
+                },
+                "Hierarchy": "Location Hierarchy"
+              }
+            },
+            "Level": "City"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e96bf661d0550dd891cb",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Total Energy (MU)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "e057f6bc24d04cb16133",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Avg Daily Energy (MU)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "32c78644582d408967b8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Peak Demand Met (MW)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4a42e7ad51a1c3273009",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Peak Unmet (MW)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "a5978a0da0bdde71e0c9",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Unmet Days"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4b12bb9ec371ee450833",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Avg Temperature (C)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "da1168c49366e7ea1c09",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Total Rainfall (mm)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8c6f88c780a33030d140",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Data Coverage %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

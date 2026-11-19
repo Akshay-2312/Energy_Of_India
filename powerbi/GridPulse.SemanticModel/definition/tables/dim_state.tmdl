@@ -1,0 +1,97 @@
+/// State & Union Territory dimension covering all 36 Indian states/UTs (including merged Dadra and Nagar Haveli and Daman and Diu).
+table dim_state
+	lineageTag: 31000000-0000-4000-8000-000000000001
+
+	/// State or Union Territory name (primary key)
+	column State
+		dataType: string
+		isKey
+		lineageTag: 31000000-0000-4000-8000-000000000002
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: State
+
+	/// Weather monitoring city (state capital / Open-Meteo reference location)
+	column City
+		dataType: string
+		lineageTag: 31000000-0000-4000-8000-000000000003
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: City
+
+	/// Geographic region (North, South, East, West, Central, North-East, Islands)
+	column Region
+		dataType: string
+		lineageTag: 31000000-0000-4000-8000-000000000004
+		summarizeBy: none
+		sourceColumn: Region
+
+	/// Latitude of the state weather station
+	column Latitude
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 31000000-0000-4000-8000-000000000005
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: Latitude
+
+	/// Longitude of the state weather station
+	column Longitude
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 31000000-0000-4000-8000-000000000006
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: Longitude
+
+	/// True if state/UT reports electricity consumption/peak data (false for Ladakh, Lakshadweep, Andaman and Nicobar Islands)
+	column Has_Energy
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 31000000-0000-4000-8000-000000000007
+		summarizeBy: none
+		sourceColumn: Has_Energy
+
+	/// True if state/UT has Open-Meteo daily weather coverage (2022-01-01 onward)
+	column Has_Weather
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 31000000-0000-4000-8000-000000000008
+		summarizeBy: none
+		sourceColumn: Has_Weather
+
+	/// Location drill-down hierarchy: Region > State > City
+	hierarchy 'Location Hierarchy'
+		lineageTag: 31000000-0000-4000-8000-000000000020
+
+		level Region
+			lineageTag: 31000000-0000-4000-8000-000000000021
+			column: Region
+
+		level State
+			lineageTag: 31000000-0000-4000-8000-000000000022
+			column: State
+
+		level City
+			lineageTag: 31000000-0000-4000-8000-000000000023
+			column: City
+
+	partition dim_state = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "gold_dim_state.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					ChangedType = Table.TransformColumnTypes(Promoted, {
+						{"State", type text},
+						{"City", type text},
+						{"Region", type text},
+						{"Latitude", type number},
+						{"Longitude", type number},
+						{"Has_Energy", type logical},
+						{"Has_Weather", type logical}
+					}, "en-US")
+				in
+					ChangedType
+

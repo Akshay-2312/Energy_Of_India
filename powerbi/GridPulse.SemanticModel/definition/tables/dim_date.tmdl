@@ -1,0 +1,154 @@
+/// Calendar dimension generated in-model (2013-01-01 to 2024-12-31) and marked as Date table.
+table dim_date
+	lineageTag: 30000000-0000-4000-8000-000000000001
+	dataCategory: Time
+
+	/// Calendar date (primary key)
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-MM-dd
+		lineageTag: 30000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar year (2013-2024)
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 30000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+	/// Calendar quarter (Q1-Q4)
+	column Quarter
+		dataType: string
+		lineageTag: 30000000-0000-4000-8000-000000000004
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+	/// Month number (1-12)
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 30000000-0000-4000-8000-000000000005
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthNumber]
+
+	/// Short month name (Jan-Dec), sorted chronologically by MonthNumber
+	column MonthName
+		dataType: string
+		lineageTag: 30000000-0000-4000-8000-000000000006
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthName]
+		sortByColumn: MonthNumber
+
+	/// First day of the calendar month (joins monthly summary tables)
+	column MonthStart
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 30000000-0000-4000-8000-000000000007
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthStart]
+
+	/// Year-Month label (yyyy-MM)
+	column YearMonth
+		dataType: string
+		lineageTag: 30000000-0000-4000-8000-000000000008
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+	/// Indian meteorological season: Winter (Dec-Feb), Summer (Mar-May), Monsoon (Jun-Sep), Post-monsoon (Oct-Nov)
+	column Season
+		dataType: string
+		lineageTag: 30000000-0000-4000-8000-000000000009
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Season]
+		sortByColumn: SeasonSort
+
+	/// Technical sort order for Season
+	column SeasonSort
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 30000000-0000-4000-8000-000000000010
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SeasonSort]
+
+	/// Day of week short name (Mon-Sun), sorted by DayOfWeekSort
+	column DayName
+		dataType: string
+		lineageTag: 30000000-0000-4000-8000-000000000011
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayName]
+		sortByColumn: DayOfWeekSort
+
+	/// Technical sort order for DayName (Monday=1 .. Sunday=7)
+	column DayOfWeekSort
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 30000000-0000-4000-8000-000000000012
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfWeekSort]
+
+	/// Calendar drill-down hierarchy: Year > Quarter > Month
+	hierarchy 'Calendar Hierarchy'
+		lineageTag: 30000000-0000-4000-8000-000000000020
+
+		level Year
+			lineageTag: 30000000-0000-4000-8000-000000000021
+			column: Year
+
+		level Quarter
+			lineageTag: 30000000-0000-4000-8000-000000000022
+			column: Quarter
+
+		level Month
+			lineageTag: 30000000-0000-4000-8000-000000000023
+			column: MonthName
+
+	partition dim_date = calculated
+		mode: import
+		source =
+				ADDCOLUMNS(
+					CALENDAR(DATE(2013, 1, 1), DATE(2024, 12, 31)),
+					"Year", YEAR([Date]),
+					"Quarter", "Q" & FORMAT([Date], "Q"),
+					"MonthNumber", MONTH([Date]),
+					"MonthName", FORMAT([Date], "MMM"),
+					"MonthStart", DATE(YEAR([Date]), MONTH([Date]), 1),
+					"YearMonth", FORMAT([Date], "yyyy-MM"),
+					"Season",
+						SWITCH(
+							TRUE(),
+							MONTH([Date]) IN {12, 1, 2}, "Winter",
+							MONTH([Date]) IN {3, 4, 5}, "Summer",
+							MONTH([Date]) IN {6, 7, 8, 9}, "Monsoon",
+							"Post-monsoon"
+						),
+					"SeasonSort",
+						SWITCH(
+							TRUE(),
+							MONTH([Date]) IN {12, 1, 2}, 1,
+							MONTH([Date]) IN {3, 4, 5}, 2,
+							MONTH([Date]) IN {6, 7, 8, 9}, 3,
+							4
+						),
+					"DayName", FORMAT([Date], "ddd"),
+					"DayOfWeekSort", WEEKDAY([Date], 2)
+				)
+

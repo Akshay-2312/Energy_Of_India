@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Clear All (Data Quality)",
+  "name": "clear_all_dq",
+  "options": {
+    "targetVisualNames": [],
+    "suppressDisplay": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "data_quality",
+    "sections": {
+      "overview": {
+        "visualContainers": {}
+      },
+      "weather_demand": {
+        "visualContainers": {}
+      },
+      "state_explorer": {
+        "visualContainers": {}
+      },
+      "state_detail": {
+        "visualContainers": {}
+      },
+      "unmet_peak": {
+        "visualContainers": {}
+      },
+      "data_quality": {
+        "visualContainers": {}
+      }
+    }
+  }
+}

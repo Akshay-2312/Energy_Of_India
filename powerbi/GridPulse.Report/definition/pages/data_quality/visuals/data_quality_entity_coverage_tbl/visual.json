@@ -1,0 +1,361 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "data_quality_entity_coverage_tbl",
+  "position": {
+    "x": 584.0,
+    "y": 194.0,
+    "z": 15,
+    "height": 252.0,
+    "width": 680.0,
+    "tabOrder": 15
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_entity_coverage"
+                    }
+                  },
+                  "Property": "Entity"
+                }
+              },
+              "queryRef": "silver_entity_coverage.Entity",
+              "nativeQueryRef": "Entity",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_entity_coverage"
+                    }
+                  },
+                  "Property": "Entity_Type"
+                }
+              },
+              "queryRef": "silver_entity_coverage.Entity_Type",
+              "nativeQueryRef": "Entity_Type",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_entity_coverage"
+                    }
+                  },
+                  "Property": "First_Date"
+                }
+              },
+              "queryRef": "silver_entity_coverage.First_Date",
+              "nativeQueryRef": "First_Date",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_entity_coverage"
+                    }
+                  },
+                  "Property": "Last_Date"
+                }
+              },
+              "queryRef": "silver_entity_coverage.Last_Date",
+              "nativeQueryRef": "Last_Date",
+              "active": true
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "silver_entity_coverage"
+                        }
+                      },
+                      "Property": "Days_Reported"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(silver_entity_coverage.Days_Reported)",
+              "nativeQueryRef": "Days_Reported",
+              "active": true
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "silver_entity_coverage"
+                        }
+                      },
+                      "Property": "Span_Days"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(silver_entity_coverage.Span_Days)",
+              "nativeQueryRef": "Span_Days",
+              "active": true
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "silver_entity_coverage"
+                        }
+                      },
+                      "Property": "Gap_Days_In_Span"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(silver_entity_coverage.Gap_Days_In_Span)",
+              "nativeQueryRef": "Gap_Days_In_Span",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_entity_coverage"
+                  }
+                },
+                "Property": "First_Date"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Entity reporting coverage and gap audit'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FAF9F5'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DCD8CF'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Table listing every raw entity, its type, first and last date, days reported, span days, and internal gap days'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1c9d7eea55b8137a3164",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "silver_entity_coverage"
+              }
+            },
+            "Property": "Entity"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "a82dda012e39059913b2",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "silver_entity_coverage"
+              }
+            },
+            "Property": "Entity_Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "9c08b073b0350a59087b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "silver_entity_coverage"
+              }
+            },
+            "Property": "First_Date"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "6d2a9f6a3d5e10e38c1b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "silver_entity_coverage"
+              }
+            },
+            "Property": "Last_Date"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "b66d83ca2d27727aab67",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_entity_coverage"
+                  }
+                },
+                "Property": "Days_Reported"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "37898ef2685c09cbbdbe",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_entity_coverage"
+                  }
+                },
+                "Property": "Span_Days"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "7732dd630d008c11349a",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_entity_coverage"
+                  }
+                },
+                "Property": "Gap_Days_In_Span"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

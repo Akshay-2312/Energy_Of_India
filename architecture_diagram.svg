@@ -1,0 +1,266 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 860" width="100%" height="100%" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#182232"/>
+    </marker>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#C84B31"/>
+    </marker>
+  </defs>
+
+  <!-- Canvas Background (Hallmark Editorial Almanac Stone Stock) -->
+  <rect width="1400" height="860" fill="#EFECE6"/>
+
+  <!-- Top Masthead Banner -->
+  <rect x="28" y="24" width="1344" height="78" fill="#182232" rx="3"/>
+  <text x="52" y="57" fill="#FAF9F5" font-size="22" font-weight="700" letter-spacing="-0.3">GridPulse India — End-to-End Medallion Lakehouse Architecture</text>
+  <text x="52" y="82" fill="#9DB2BF" font-size="13" font-weight="400">Weather-Driven Electricity Consumption, Peak Demand &amp; Grid Deficit Analytics  |  Apache Spark • Databricks Lakeflow (DLT) • Delta Lake • Power BI (PBIP / TMDL / PBIR)</text>
+  <rect x="1176" y="42" width="172" height="40" fill="#C84B31" rx="2"/>
+  <text x="1262" y="67" fill="#FAF9F5" font-size="12" font-weight="600" text-anchor="middle">Domain #7: Smart Energy</text>
+
+  <!-- ======================================================================= -->
+  <!-- LAYER 1: DATA EXTRACTION & UNITY CATALOG VOLUME STORAGE                 -->
+  <!-- ======================================================================= -->
+  <rect x="28" y="122" width="290" height="712" fill="#FAF9F5" stroke="#DCD8CF" stroke-width="1.5" rx="3"/>
+  <rect x="28" y="122" width="290" height="38" fill="#334E68" rx="3"/>
+  <text x="44" y="146" fill="#FAF9F5" font-size="13" font-weight="700">LAYER 1 · DATA EXTRACTION &amp; STORAGE</text>
+
+  <!-- Source 1: Zenodo Energy -->
+  <rect x="44" y="178" width="258" height="206" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="44" y="178" width="6" height="206" fill="#182232"/>
+  <text x="62" y="201" fill="#14181F" font-size="13" font-weight="700">Zenodo National Power Grid Feeds</text>
+  <text x="62" y="219" fill="#5A606D" font-size="11">3 Wide CSVs • 2013-01-01 to 2024-04-28</text>
+  <line x1="62" y1="229" x2="288" y2="229" stroke="#DCD8CF" stroke-width="1"/>
+  <text x="62" y="248" fill="#14181F" font-size="11.5" font-weight="600">1. corrected_daily_energy_met_MU.csv</text>
+  <text x="74" y="264" fill="#5A606D" font-size="10.5">3,955 rows × 40 cols (Daily Energy Met, MU)</text>
+  <text x="62" y="286" fill="#14181F" font-size="11.5" font-weight="600">2. corrected_peak_met_MW.csv</text>
+  <text x="74" y="302" fill="#5A606D" font-size="10.5">3,955 rows × 40 cols (Peak Demand Met, MW)</text>
+  <text x="62" y="324" fill="#14181F" font-size="11.5" font-weight="600">3. peak_unmet_MW.csv</text>
+  <text x="74" y="340" fill="#5A606D" font-size="10.5">3,955 rows × 40 cols (Unmet Peak Deficit, MW)</text>
+  <text x="62" y="368" fill="#C84B31" font-size="10" font-weight="600">Anomalies: 55 dup dates, 236 missing dates, 2 empty UTs</text>
+
+  <!-- Source 2: Open-Meteo Weather -->
+  <rect x="44" y="400" width="258" height="150" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="44" y="400" width="6" height="150" fill="#C84B31"/>
+  <text x="62" y="423" fill="#14181F" font-size="13" font-weight="700">Open-Meteo Climate API Feed</text>
+  <text x="62" y="441" fill="#5A606D" font-size="11">State-Level Daily Weather • 2022–2024</text>
+  <line x1="62" y1="451" x2="288" y2="451" stroke="#DCD8CF" stroke-width="1"/>
+  <text x="62" y="471" fill="#14181F" font-size="11.5" font-weight="600">4. all_india_weather.csv</text>
+  <text x="74" y="488" fill="#5A606D" font-size="10.5">30,564 rows × 9 cols (849 days × 36 states/UTs)</text>
+  <text x="74" y="505" fill="#5A606D" font-size="10.5">Mean/Max/Min Temp (°C), Rainfall (mm), Wind (km/h)</text>
+  <text x="74" y="522" fill="#5A606D" font-size="10.5">State capital Location + Latitude &amp; Longitude</text>
+  <text x="62" y="540" fill="#2B6E57" font-size="10" font-weight="600">Quality: 0 duplicate keys, 0 nulls, merged DNH &amp; DD</text>
+
+  <!-- Unity Catalog Volume Box -->
+  <rect x="44" y="568" width="258" height="246" fill="#182232" rx="2"/>
+  <text x="60" y="594" fill="#FAF9F5" font-size="13" font-weight="700">Databricks Unity Catalog Volume</text>
+  <text x="60" y="613" fill="#9DB2BF" font-size="11">Cloud Object Landing Zone (Raw CSVs)</text>
+  <line x1="60" y1="624" x2="286" y2="624" stroke="#334E68" stroke-width="1"/>
+  <text x="60" y="646" fill="#FAF9F5" font-size="10.5" font-family="Consolas, monospace">/Volumes/workspace/default/</text>
+  <text x="68" y="663" fill="#FAF9F5" font-size="10.5" font-family="Consolas, monospace">smartgrid_raw/</text>
+  <text x="78" y="683" fill="#9DB2BF" font-size="10.5" font-family="Consolas, monospace">├── zenodo/</text>
+  <text x="90" y="700" fill="#DCD8CF" font-size="9.5" font-family="Consolas, monospace">│   ├── corrected_daily_energy_met_MU.csv</text>
+  <text x="90" y="716" fill="#DCD8CF" font-size="9.5" font-family="Consolas, monospace">│   ├── corrected_peak_met_MW.csv</text>
+  <text x="90" y="732" fill="#DCD8CF" font-size="9.5" font-family="Consolas, monospace">│   └── peak_unmet_MW.csv</text>
+  <text x="78" y="752" fill="#9DB2BF" font-size="10.5" font-family="Consolas, monospace">└── open_meteo/</text>
+  <text x="90" y="769" fill="#DCD8CF" font-size="9.5" font-family="Consolas, monospace">    └── all_india_weather.csv</text>
+  <text x="60" y="798" fill="#C84B31" font-size="10.5" font-weight="600">Exploratory Audit: smart/EDA.py (735 lines)</text>
+
+  <!-- Arrow from Sources to Volume -->
+  <line x1="173" y1="550" x2="173" y2="565" stroke="#182232" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ======================================================================= -->
+  <!-- LAYER 2: DATABRICKS MEDALLION ETL PIPELINE (BRONZE -> SILVER -> GOLD)   -->
+  <!-- ======================================================================= -->
+  <rect x="342" y="122" width="716" height="712" fill="#FAF9F5" stroke="#DCD8CF" stroke-width="1.5" rx="3"/>
+  <rect x="342" y="122" width="716" height="38" fill="#182232" rx="3"/>
+  <text x="360" y="146" fill="#FAF9F5" font-size="13" font-weight="700">LAYER 2 · DATABRICKS LAKEFLOW DECLARATIVE PIPELINE (my_transformation.py · 22 DELTA TABLES)</text>
+
+  <!-- BRONZE COLUMN -->
+  <rect x="358" y="176" width="210" height="560" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="358" y="176" width="210" height="32" fill="#8C5A3C" rx="2"/>
+  <text x="463" y="197" fill="#FAF9F5" font-size="12" font-weight="700" text-anchor="middle">BRONZE · Raw Streaming (4)</text>
+
+  <text x="370" y="226" fill="#5A606D" font-size="10.5">Auto Loader (cloudFiles) • All Strings</text>
+  <text x="370" y="241" fill="#5A606D" font-size="10.5">Regex Header Sanitization (Delta-safe)</text>
+
+  <rect x="370" y="256" width="186" height="54" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="380" y="276" fill="#14181F" font-size="11" font-weight="700">bronze_daily_energy</text>
+  <text x="380" y="294" fill="#5A606D" font-size="10">3,955 rows • 40 sanitized cols</text>
+
+  <rect x="370" y="322" width="186" height="54" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="380" y="342" fill="#14181F" font-size="11" font-weight="700">bronze_peak_energy</text>
+  <text x="380" y="360" fill="#5A606D" font-size="10">3,955 rows • 40 sanitized cols</text>
+
+  <rect x="370" y="388" width="186" height="54" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="380" y="408" fill="#14181F" font-size="11" font-weight="700">bronze_peak_unmet</text>
+  <text x="380" y="426" fill="#5A606D" font-size="10">3,955 rows • 40 sanitized cols</text>
+
+  <rect x="370" y="454" width="186" height="54" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="380" y="474" fill="#14181F" font-size="11" font-weight="700">bronze_weather</text>
+  <text x="380" y="492" fill="#5A606D" font-size="10">30,564 rows • 9 cols + metadata</text>
+
+  <rect x="370" y="524" width="186" height="196" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="380" y="545" fill="#14181F" font-size="11" font-weight="700">Bronze Ingestion Design</text>
+  <text x="380" y="565" fill="#5A606D" font-size="10">• inferColumnTypes = false</text>
+  <text x="380" y="582" fill="#5A606D" font-size="10">• pathGlobFilter per file</text>
+  <text x="380" y="599" fill="#5A606D" font-size="10">• Preserves raw strings so</text>
+  <text x="380" y="614" fill="#5A606D" font-size="10">  corrupt cells do not fail</text>
+  <text x="380" y="629" fill="#5A606D" font-size="10">  streaming ingestion</text>
+  <text x="380" y="648" fill="#5A606D" font-size="10">• Appends audit columns:</text>
+  <text x="388" y="665" fill="#182232" font-size="10" font-family="Consolas, monospace">_ingested_at</text>
+  <text x="388" y="681" fill="#182232" font-size="10" font-family="Consolas, monospace">_source_file</text>
+  <text x="388" y="697" fill="#182232" font-size="10" font-family="Consolas, monospace">_rescued_data</text>
+
+  <!-- SILVER COLUMN -->
+  <rect x="588" y="176" width="224" height="560" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="588" y="176" width="224" height="32" fill="#526D82" rx="2"/>
+  <text x="700" y="197" fill="#FAF9F5" font-size="12" font-weight="700" text-anchor="middle">SILVER · Cleaned &amp; Validated (7)</text>
+
+  <text x="600" y="226" fill="#5A606D" font-size="10.5">try_cast • Drop Empty Islands • MAX Dedup</text>
+  <text x="600" y="241" fill="#C84B31" font-size="10.5" font-weight="600">@dlt.expect / @dlt.expect_or_drop</text>
+
+  <rect x="600" y="256" width="200" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="275" fill="#14181F" font-size="10.5" font-weight="700">silver_daily_energy_pipeline</text>
+  <text x="610" y="292" fill="#5A606D" font-size="9.5">3,900 unique dates • 38 cols</text>
+
+  <rect x="600" y="312" width="200" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="331" fill="#14181F" font-size="10.5" font-weight="700">silver_peak_energy_pipeline</text>
+  <text x="610" y="348" fill="#5A606D" font-size="9.5">3,900 unique dates • 38 cols</text>
+
+  <rect x="600" y="368" width="200" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="387" fill="#14181F" font-size="10.5" font-weight="700">silver_peak_unmet_pipeline</text>
+  <text x="610" y="404" fill="#5A606D" font-size="9.5">3,900 unique dates • 38 cols</text>
+
+  <rect x="600" y="424" width="200" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="443" fill="#14181F" font-size="10.5" font-weight="700">silver_weather_pipeline</text>
+  <text x="610" y="460" fill="#5A606D" font-size="9.5">30,564 rows • Lat 6..38, Lon 68..98</text>
+
+  <rect x="600" y="480" width="200" height="62" fill="#FAF9F5" stroke="#182232" stroke-width="1.2" rx="2"/>
+  <text x="610" y="499" fill="#14181F" font-size="10.5" font-weight="700">silver_energy_long</text>
+  <text x="610" y="515" fill="#5A606D" font-size="9.5">142,405 rows • SQL stack() unpivot</text>
+  <text x="610" y="531" fill="#C84B31" font-size="9.5" font-weight="600">Tags: State/UT | Utility | National Total</text>
+
+  <rect x="600" y="550" width="200" height="52" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="569" fill="#14181F" font-size="10.5" font-weight="700">silver_missing_date_audit</text>
+  <text x="610" y="586" fill="#5A606D" font-size="9.5">236 missing calendar dates audited</text>
+
+  <rect x="600" y="610" width="200" height="52" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="629" fill="#14181F" font-size="10.5" font-weight="700">silver_entity_coverage</text>
+  <text x="610" y="646" fill="#5A606D" font-size="9.5">37 entities • Span &amp; gap-day audit</text>
+
+  <rect x="600" y="670" width="200" height="50" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="610" y="689" fill="#14181F" font-size="10" font-weight="700">Dropped Empty Columns:</text>
+  <text x="610" y="705" fill="#5A606D" font-size="9.5">A&amp;N Islands, Lakshadweep (0 energy rows)</text>
+
+  <!-- GOLD COLUMN -->
+  <rect x="832" y="176" width="210" height="560" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="832" y="176" width="210" height="32" fill="#B46927" rx="2"/>
+  <text x="937" y="197" fill="#FAF9F5" font-size="12" font-weight="700" text-anchor="middle">GOLD · Star Schema &amp; KPIs (11)</text>
+
+  <text x="844" y="226" fill="#5A606D" font-size="10.5">DNH+DD UT Merge • Weather Left-Join</text>
+  <text x="844" y="241" fill="#5A606D" font-size="10.5">7-Region Analytical Taxonomy</text>
+
+  <rect x="844" y="256" width="186" height="52" fill="#FAF9F5" stroke="#182232" stroke-width="1.2" rx="2"/>
+  <text x="854" y="275" fill="#14181F" font-size="10.5" font-weight="700">gold_dim_state</text>
+  <text x="854" y="292" fill="#5A606D" font-size="9.5">36 States/UTs • City, Region, Lat/Lon</text>
+
+  <rect x="844" y="316" width="186" height="58" fill="#FAF9F5" stroke="#C84B31" stroke-width="1.5" rx="2"/>
+  <text x="854" y="335" fill="#14181F" font-size="10.5" font-weight="700">gold_energy_weather</text>
+  <text x="854" y="351" fill="#5A606D" font-size="9.5">127,590 state-days (27,157 w/ weather)</text>
+  <text x="854" y="365" fill="#C84B31" font-size="9.5" font-weight="600">Primary State-Day Fact Table</text>
+
+  <rect x="844" y="382" width="186" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="854" y="401" fill="#14181F" font-size="10.5" font-weight="700">gold_weather</text>
+  <text x="854" y="418" fill="#5A606D" font-size="9.5">30,564 rows • All 36 states/UTs</text>
+
+  <rect x="844" y="438" width="186" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="854" y="457" fill="#14181F" font-size="10.5" font-weight="700">gold_national_daily</text>
+  <text x="854" y="474" fill="#5A606D" font-size="9.5">3,900 dates • Authoritative National Totals</text>
+
+  <rect x="844" y="494" width="186" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="854" y="513" fill="#14181F" font-size="10.5" font-weight="700">gold_monthly_summary</text>
+  <text x="854" y="530" fill="#5A606D" font-size="9.5">135 national months • Energy &amp; Peak</text>
+
+  <rect x="844" y="550" width="186" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="854" y="569" fill="#14181F" font-size="10.5" font-weight="700">gold_state_monthly_summary</text>
+  <text x="854" y="586" fill="#5A606D" font-size="9.5">4,416 state-months • Energy + Weather</text>
+
+  <rect x="844" y="606" width="186" height="48" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="854" y="625" fill="#14181F" font-size="10.5" font-weight="700">gold_non_state_entities</text>
+  <text x="854" y="642" fill="#5A606D" font-size="9.5">7,709 rows • AMNSIL &amp; DVC isolated</text>
+
+  <rect x="844" y="662" width="186" height="58" fill="#FAF9F5" stroke="#DCD8CF" rx="2"/>
+  <text x="854" y="681" fill="#14181F" font-size="10" font-weight="700">+ 4 Intermediate Gold Tables:</text>
+  <text x="854" y="697" fill="#5A606D" font-size="9.5">gold_state_energy (127,590)</text>
+  <text x="854" y="711" fill="#5A606D" font-size="9.5">gold_daily / peak / unmet (3,900 ea)</text>
+
+  <!-- Bottom Exporter Banner inside Layer 2 -->
+  <rect x="358" y="750" width="684" height="64" fill="#182232" rx="2"/>
+  <text x="378" y="775" fill="#FAF9F5" font-size="12" font-weight="700">Local PySpark 4 Contract Verifier &amp; Exporter (powerbi/export_gold.py)</text>
+  <text x="378" y="796" fill="#9DB2BF" font-size="10.5">Executes my_transformation.py in PySpark ANSI mode • Enforces @dlt.expect rules • Exports 9 UTF-8 CSVs to powerbi/data/ (0 dup keys, 0 orphans)</text>
+
+  <!-- Horizontal Connectors: Volume -> Bronze -> Silver -> Gold -->
+  <line x1="302" y1="680" x2="356" y2="380" stroke="#182232" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="568" y1="380" x2="586" y2="380" stroke="#182232" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="812" y1="380" x2="830" y2="380" stroke="#182232" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ======================================================================= -->
+  <!-- LAYER 3: POWER BI SEMANTIC MODEL (TMDL) & INTERACTIVE REPORT (PBIR)     -->
+  <!-- ======================================================================= -->
+  <rect x="1082" y="122" width="290" height="712" fill="#FAF9F5" stroke="#DCD8CF" stroke-width="1.5" rx="3"/>
+  <rect x="1082" y="122" width="290" height="38" fill="#C84B31" rx="3"/>
+  <text x="1100" y="146" fill="#FAF9F5" font-size="13" font-weight="700">LAYER 3 · POWER BI (GridPulse.pbip)</text>
+
+  <!-- Semantic Model Box -->
+  <rect x="1098" y="176" width="258" height="270" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="1098" y="176" width="6" height="270" fill="#182232"/>
+  <text x="1116" y="199" fill="#14181F" font-size="13" font-weight="700">Semantic Model (TMDL Format)</text>
+  <text x="1116" y="217" fill="#5A606D" font-size="11">GridPulse.SemanticModel • VertiPaq Import</text>
+  <line x1="1116" y1="227" x2="1342" y2="227" stroke="#DCD8CF" stroke-width="1"/>
+  <text x="1116" y="247" fill="#14181F" font-size="11" font-weight="600">• 13 Model Tables &amp; 10 Relationships</text>
+  <text x="1126" y="264" fill="#5A606D" font-size="10">dim_date (2013–2024 Marked Date Table)</text>
+  <text x="1126" y="280" fill="#5A606D" font-size="10">dim_state (36 States/UTs, 7 Regions)</text>
+  <text x="1126" y="296" fill="#5A606D" font-size="10">7 Gold/Silver Fact &amp; Audit Tables</text>
+  <text x="1126" y="312" fill="#5A606D" font-size="10">Weather Driver &amp; Metric Chooser Tables</text>
+  <text x="1116" y="334" fill="#14181F" font-size="11" font-weight="600">• Calculated Weather Band Columns</text>
+  <text x="1126" y="351" fill="#5A606D" font-size="10">Temperature, Rainfall &amp; Wind Bands</text>
+  <text x="1116" y="373" fill="#14181F" font-size="11" font-weight="600">• 21 Validated DAX Measures (_Measures)</text>
+  <text x="1126" y="390" fill="#5A606D" font-size="10">ISFILTERED switch: fact_national_daily</text>
+  <text x="1126" y="406" fill="#5A606D" font-size="10">(All India) vs fact_energy_weather (State)</text>
+  <text x="1116" y="430" fill="#2B6E57" font-size="10" font-weight="600">Dual Source: Local DataFolder CSVs or Unity Catalog</text>
+
+  <!-- Interactive Report Box -->
+  <rect x="1098" y="462" width="258" height="352" fill="#F3F1EC" stroke="#DCD8CF" stroke-width="1" rx="2"/>
+  <rect x="1098" y="462" width="6" height="352" fill="#C84B31"/>
+  <text x="1116" y="485" fill="#14181F" font-size="13" font-weight="700">Interactive Report (PBIR Format)</text>
+  <text x="1116" y="503" fill="#5A606D" font-size="11">6 Pages • 124 Visuals • Hallmark Theme</text>
+  <line x1="1116" y1="513" x2="1342" y2="513" stroke="#DCD8CF" stroke-width="1"/>
+
+  <text x="1116" y="534" fill="#14181F" font-size="11" font-weight="700">1. Overview</text>
+  <text x="1128" y="550" fill="#5A606D" font-size="10">National KPIs, Annual Trend, State &amp; Season</text>
+
+  <text x="1116" y="572" fill="#14181F" font-size="11" font-weight="700">2. Weather &amp; Demand</text>
+  <text x="1128" y="588" fill="#5A606D" font-size="10">Driver Chooser, State Ranking, Temp/Rain/Wind</text>
+
+  <text x="1116" y="610" fill="#14181F" font-size="11" font-weight="700">3. State Explorer</text>
+  <text x="1128" y="626" fill="#5A606D" font-size="10">Regional Share Pie, Ranked Bar, Hierarchy Matrix</text>
+
+  <text x="1116" y="648" fill="#14181F" font-size="11" font-weight="700">4. State Detail (Drill-Through)</text>
+  <text x="1128" y="664" fill="#5A606D" font-size="10">Single-State Annual Trend, Seasonal Peak, Ledger</text>
+
+  <text x="1116" y="686" fill="#14181F" font-size="11" font-weight="700">5. Unmet &amp; Peak</text>
+  <text x="1128" y="702" fill="#5A606D" font-size="10">Peak Met vs Unmet Deficit, Top Deficit States</text>
+
+  <text x="1116" y="724" fill="#14181F" font-size="11" font-weight="700">6. Data Quality</text>
+  <text x="1128" y="740" fill="#5A606D" font-size="10">236 Missing Dates, 37 Entity Spans, AMNSIL &amp; DVC</text>
+
+  <rect x="1116" y="758" width="224" height="40" fill="#182232" rx="2"/>
+  <text x="1228" y="776" fill="#FAF9F5" font-size="10.5" font-weight="600" text-anchor="middle">Validated via pbi-cli (139 files, 0 errors)</text>
+  <text x="1228" y="791" fill="#9DB2BF" font-size="9.5" text-anchor="middle">Hallmark Editorial Almanac Design System</text>
+
+  <!-- Connector from Gold & Exporter to Power BI -->
+  <line x1="1042" y1="345" x2="1096" y2="310" stroke="#C84B31" stroke-width="2.2" marker-end="url(#arrow-accent)"/>
+  <line x1="1042" y1="782" x2="1096" y2="380" stroke="#182232" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+  <line x1="1227" y1="446" x2="1227" y2="460" stroke="#182232" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

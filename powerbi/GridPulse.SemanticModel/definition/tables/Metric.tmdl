@@ -1,0 +1,36 @@
+/// Disconnected parameter table for switching the primary energy/demand metric (Energy, Peak met, Peak unmet).
+table Metric
+	lineageTag: 33000000-0000-4000-8000-000000000001
+
+	/// Metric name (Energy, Peak met, Peak unmet)
+	column Metric
+		dataType: string
+		lineageTag: 33000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Metric]
+		sortByColumn: MetricOrder
+
+	/// Technical sort order for Metric
+	column MetricOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 33000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MetricOrder]
+
+	partition Metric = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"Metric", STRING,
+					"MetricOrder", INTEGER,
+					{
+						{"Energy", 1},
+						{"Peak met", 2},
+						{"Peak unmet", 3}
+					}
+				)
+

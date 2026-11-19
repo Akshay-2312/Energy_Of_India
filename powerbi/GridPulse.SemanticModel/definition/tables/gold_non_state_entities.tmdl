@@ -1,0 +1,83 @@
+/// Utility and industrial entities (AMNSIL, Damodar Valley Corporation) separated from state-level analysis.
+table gold_non_state_entities
+	lineageTag: 3b000000-0000-4000-8000-000000000001
+
+	/// Reporting date (hidden FK; slice via dim_date[Date])
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 3b000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Non-state entity name (AMNSIL or Damodar Valley Corporation)
+	column Entity
+		dataType: string
+		lineageTag: 3b000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		sourceColumn: Entity
+
+	/// Daily energy met (MU)
+	column Daily_Energy_MU
+		dataType: double
+		formatString: #,##0.0
+		lineageTag: 3b000000-0000-4000-8000-000000000004
+		summarizeBy: sum
+		sourceColumn: Daily_Energy_MU
+
+	/// Daily peak power met (MW)
+	column Peak_Met_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 3b000000-0000-4000-8000-000000000005
+		summarizeBy: max
+		sourceColumn: Peak_Met_MW
+
+	/// Daily peak unmet demand (MW)
+	column Peak_Unmet_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 3b000000-0000-4000-8000-000000000006
+		summarizeBy: max
+		sourceColumn: Peak_Unmet_MW
+
+	/// Technical calendar year (hidden; use dim_date[Year])
+	column Year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3b000000-0000-4000-8000-000000000007
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// Technical calendar month (hidden; use dim_date[MonthNumber])
+	column Month
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3b000000-0000-4000-8000-000000000008
+		summarizeBy: none
+		sourceColumn: Month
+
+	partition gold_non_state_entities = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "gold_non_state_entities.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					ChangedType = Table.TransformColumnTypes(Promoted, {
+						{"Date", type date},
+						{"Entity", type text},
+						{"Daily_Energy_MU", type number},
+						{"Peak_Met_MW", type number},
+						{"Peak_Unmet_MW", type number},
+						{"Year", Int64.Type},
+						{"Month", Int64.Type}
+					}, "en-US")
+				in
+					ChangedType
+

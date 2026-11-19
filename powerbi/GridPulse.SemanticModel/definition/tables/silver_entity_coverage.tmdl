@@ -1,0 +1,91 @@
+/// Reporting coverage per entity in the raw Zenodo energy feed (first/last date, reported days, and internal gap days).
+table silver_entity_coverage
+	lineageTag: 3a000000-0000-4000-8000-000000000001
+
+	/// Raw entity name (State/UT, Utility/Industrial, or National Total)
+	column Entity
+		dataType: string
+		lineageTag: 3a000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Entity
+
+	/// Entity classification (State/UT, Utility/Industrial, National Total)
+	column Entity_Type
+		dataType: string
+		lineageTag: 3a000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		sourceColumn: Entity_Type
+
+	/// First reported date for entity
+	column First_Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 3a000000-0000-4000-8000-000000000004
+		summarizeBy: none
+		sourceColumn: First_Date
+
+		variation Variation
+			isDefault
+			relationship: 1cb09942-77fa-4516-9cd8-c0cedfd9beb0
+			defaultHierarchy: LocalDateTable_40e52621-959a-4686-8fe7-d8439d643ca2.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Last reported date for entity
+	column Last_Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 3a000000-0000-4000-8000-000000000005
+		summarizeBy: none
+		sourceColumn: Last_Date
+
+		variation Variation
+			isDefault
+			relationship: b7c71ea8-eed2-41a9-a5e5-c51872363782
+			defaultHierarchy: LocalDateTable_978d3634-19b1-462d-9ae8-f0cddf432f78.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Distinct days with reported Daily_Energy_MU
+	column Days_Reported
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 3a000000-0000-4000-8000-000000000006
+		summarizeBy: sum
+		sourceColumn: Days_Reported
+
+	/// Inclusive calendar span in days from First_Date to Last_Date
+	column Span_Days
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 3a000000-0000-4000-8000-000000000007
+		summarizeBy: sum
+		sourceColumn: Span_Days
+
+	/// Missing days inside the entity's reporting span (Span_Days - Days_Reported)
+	column Gap_Days_In_Span
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 3a000000-0000-4000-8000-000000000008
+		summarizeBy: sum
+		sourceColumn: Gap_Days_In_Span
+
+	partition silver_entity_coverage = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "silver_entity_coverage.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					ChangedType = Table.TransformColumnTypes(Promoted, {
+						{"Entity", type text},
+						{"Entity_Type", type text},
+						{"First_Date", type date},
+						{"Last_Date", type date},
+						{"Days_Reported", Int64.Type},
+						{"Span_Days", Int64.Type},
+						{"Gap_Days_In_Span", Int64.Type}
+					}, "en-US")
+				in
+					ChangedType
+

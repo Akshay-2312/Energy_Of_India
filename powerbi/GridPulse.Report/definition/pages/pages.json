@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "overview",
+    "weather_demand",
+    "state_explorer",
+    "state_detail",
+    "unmet_peak",
+    "data_quality"
+  ],
+  "activePageName": "weather_demand"
+}

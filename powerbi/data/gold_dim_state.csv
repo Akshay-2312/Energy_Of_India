@@ -1,0 +1,37 @@
+State,City,Region,Latitude,Longitude,Has_Energy,Has_Weather
+Andaman and Nicobar Islands,Port Blair,Islands,11.6234,92.7265,false,true
+Andhra Pradesh,Amaravati,South,16.5062,80.648,true,true
+Arunachal Pradesh,Itanagar,North-East,27.0844,93.6053,true,true
+Assam,Guwahati,North-East,26.1445,91.7362,true,true
+Bihar,Patna,East,25.5941,85.1376,true,true
+Chandigarh,Chandigarh,North,30.7333,76.7794,true,true
+Chhattisgarh,Raipur,Central,21.2514,81.6296,true,true
+Dadra and Nagar Haveli and Daman and Diu,Silvassa,West,20.2766,73.0083,true,true
+Delhi,New Delhi,North,28.6139,77.209,true,true
+Goa,Panaji,West,15.4909,73.8278,true,true
+Gujarat,Gandhinagar,West,23.2156,72.6369,true,true
+Haryana,Gurugram,North,28.4595,77.0266,true,true
+Himachal Pradesh,Shimla,North,31.1048,77.1734,true,true
+Jammu and Kashmir,Srinagar,North,34.0837,74.7973,true,true
+Jharkhand,Ranchi,East,23.3441,85.3096,true,true
+Karnataka,Bengaluru,South,12.9716,77.5946,true,true
+Kerala,Thiruvananthapuram,South,8.5241,76.9366,true,true
+Ladakh,Leh,North,34.1526,77.5771,false,true
+Lakshadweep,Kavaratti,Islands,10.5667,72.6417,false,true
+Madhya Pradesh,Bhopal,Central,23.2599,77.4126,true,true
+Maharashtra,Mumbai,West,19.076,72.8777,true,true
+Manipur,Imphal,North-East,24.817,93.9368,true,true
+Meghalaya,Shillong,North-East,25.5788,91.8933,true,true
+Mizoram,Aizawl,North-East,23.7271,92.7176,true,true
+Nagaland,Kohima,North-East,25.6751,94.1086,true,true
+Odisha,Bhubaneswar,East,20.2961,85.8245,true,true
+Puducherry,Puducherry,South,11.9416,79.8083,true,true
+Punjab,Ludhiana,North,30.901,75.8573,true,true
+Rajasthan,Jaipur,West,26.9124,75.7873,true,true
+Sikkim,Gangtok,North-East,27.3389,88.6065,true,true
+Tamil Nadu,Chennai,South,13.0827,80.2707,true,true
+Telangana,Hyderabad,South,17.385,78.4867,true,true
+Tripura,Agartala,North-East,23.8315,91.2868,true,true
+Uttar Pradesh,Lucknow,North,26.8467,80.9462,true,true
+Uttarakhand,Dehradun,North,30.3165,78.0322,true,true
+West Bengal,Kolkata,East,22.5726,88.3639,true,true

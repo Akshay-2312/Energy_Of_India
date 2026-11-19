@@ -1,0 +1,258 @@
+/// State-wise daily energy (MU), peak met (MW), peak unmet (MW) joined to Open-Meteo weather on (Date, State). Weather exists from 2022-01-01 onward.
+table fact_energy_weather
+	lineageTag: 34000000-0000-4000-8000-000000000001
+
+	/// Reporting date (hidden FK; slice via dim_date[Date])
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 34000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// State/UT name (hidden FK; slice via dim_state[State])
+	column State
+		dataType: string
+		isHidden
+		lineageTag: 34000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		sourceColumn: State
+
+	/// Daily electricity consumption met (Million Units)
+	column Daily_Energy_MU
+		dataType: double
+		formatString: #,##0.0
+		lineageTag: 34000000-0000-4000-8000-000000000004
+		summarizeBy: sum
+		sourceColumn: Daily_Energy_MU
+
+	/// Daily peak power demand met (MW)
+	column Peak_Met_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 34000000-0000-4000-8000-000000000005
+		summarizeBy: max
+		sourceColumn: Peak_Met_MW
+
+	/// Daily peak unmet demand / deficit (MW)
+	column Peak_Unmet_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 34000000-0000-4000-8000-000000000006
+		summarizeBy: max
+		sourceColumn: Peak_Unmet_MW
+
+	/// Daily mean temperature at 2m (deg C), available 2022-01-01 onward
+	column Avg_Temperature
+		dataType: double
+		formatString: 0.0
+		lineageTag: 34000000-0000-4000-8000-000000000007
+		summarizeBy: average
+		sourceColumn: Avg_Temperature
+
+	/// Daily maximum temperature at 2m (deg C), available 2022-01-01 onward
+	column Max_Temperature
+		dataType: double
+		formatString: 0.0
+		lineageTag: 34000000-0000-4000-8000-000000000008
+		summarizeBy: max
+		sourceColumn: Max_Temperature
+
+	/// Daily minimum temperature at 2m (deg C), available 2022-01-01 onward
+	column Min_Temperature
+		dataType: double
+		formatString: 0.0
+		lineageTag: 34000000-0000-4000-8000-000000000009
+		summarizeBy: min
+		sourceColumn: Min_Temperature
+
+	/// Daily total precipitation (mm), available 2022-01-01 onward
+	column Total_Precipitation
+		dataType: double
+		formatString: 0.0
+		lineageTag: 34000000-0000-4000-8000-000000000010
+		summarizeBy: sum
+		sourceColumn: Total_Precipitation
+
+	/// Daily max wind speed at 10m (km/h), available 2022-01-01 onward
+	column Avg_Wind_Speed
+		dataType: double
+		formatString: 0.0
+		lineageTag: 34000000-0000-4000-8000-000000000011
+		summarizeBy: average
+		sourceColumn: Avg_Wind_Speed
+
+	/// True when weather data is present for (Date, State)
+	column Has_Weather
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 34000000-0000-4000-8000-000000000012
+		summarizeBy: none
+		sourceColumn: Has_Weather
+
+	/// Technical calendar column (hidden; use dim_date[Year])
+	column Year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34000000-0000-4000-8000-000000000013
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// Technical calendar column (hidden; use dim_date[MonthNumber])
+	column Month
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34000000-0000-4000-8000-000000000014
+		summarizeBy: none
+		sourceColumn: Month
+
+	/// Technical calendar column (hidden; use dim_date[Quarter])
+	column Quarter
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34000000-0000-4000-8000-000000000015
+		summarizeBy: none
+		sourceColumn: Quarter
+
+	/// Temperature band based on daily Avg_Temperature (Cool <20, Mild 20-30, Hot 30-38, Extreme >=38 C)
+	column 'Temperature Band' =
+			IF(
+				NOT(fact_energy_weather[Has_Weather]) || ISBLANK(fact_energy_weather[Avg_Temperature]),
+				"No weather data",
+				SWITCH(
+					TRUE(),
+					fact_energy_weather[Avg_Temperature] < 20, "Cool (<20 C)",
+					fact_energy_weather[Avg_Temperature] < 30, "Mild (20-30 C)",
+					fact_energy_weather[Avg_Temperature] < 38, "Hot (30-38 C)",
+					"Extreme (>=38 C)"
+				)
+			)
+		dataType: string
+		lineageTag: 34000000-0000-4000-8000-000000000016
+		summarizeBy: none
+		sortByColumn: 'Temperature Band Sort'
+
+	/// Technical sort order for Temperature Band
+	column 'Temperature Band Sort' =
+			IF(
+				NOT(fact_energy_weather[Has_Weather]) || ISBLANK(fact_energy_weather[Avg_Temperature]),
+				5,
+				SWITCH(
+					TRUE(),
+					fact_energy_weather[Avg_Temperature] < 20, 1,
+					fact_energy_weather[Avg_Temperature] < 30, 2,
+					fact_energy_weather[Avg_Temperature] < 38, 3,
+					4
+				)
+			)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34000000-0000-4000-8000-000000000017
+		summarizeBy: none
+
+	/// Rainfall band based on daily Total_Precipitation (Dry =0, Light >0-10, Moderate 10-50, Heavy >50 mm)
+	column 'Rainfall Band' =
+			IF(
+				NOT(fact_energy_weather[Has_Weather]) || ISBLANK(fact_energy_weather[Total_Precipitation]),
+				"No weather data",
+				SWITCH(
+					TRUE(),
+					fact_energy_weather[Total_Precipitation] <= 0, "Dry (0 mm)",
+					fact_energy_weather[Total_Precipitation] <= 10, "Light (0-10 mm)",
+					fact_energy_weather[Total_Precipitation] <= 50, "Moderate (10-50 mm)",
+					"Heavy (>50 mm)"
+				)
+			)
+		dataType: string
+		lineageTag: 34000000-0000-4000-8000-000000000018
+		summarizeBy: none
+		sortByColumn: 'Rainfall Band Sort'
+
+	/// Technical sort order for Rainfall Band
+	column 'Rainfall Band Sort' =
+			IF(
+				NOT(fact_energy_weather[Has_Weather]) || ISBLANK(fact_energy_weather[Total_Precipitation]),
+				5,
+				SWITCH(
+					TRUE(),
+					fact_energy_weather[Total_Precipitation] <= 0, 1,
+					fact_energy_weather[Total_Precipitation] <= 10, 2,
+					fact_energy_weather[Total_Precipitation] <= 50, 3,
+					4
+				)
+			)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34000000-0000-4000-8000-000000000019
+		summarizeBy: none
+
+	/// Wind band based on daily Avg_Wind_Speed (Calm <15, Breezy 15-30, Strong >=30 km/h)
+	column 'Wind Band' =
+			IF(
+				NOT(fact_energy_weather[Has_Weather]) || ISBLANK(fact_energy_weather[Avg_Wind_Speed]),
+				"No weather data",
+				SWITCH(
+					TRUE(),
+					fact_energy_weather[Avg_Wind_Speed] < 15, "Calm (<15 km/h)",
+					fact_energy_weather[Avg_Wind_Speed] < 30, "Breezy (15-30 km/h)",
+					"Strong (>=30 km/h)"
+				)
+			)
+		dataType: string
+		lineageTag: 34000000-0000-4000-8000-000000000020
+		summarizeBy: none
+		sortByColumn: 'Wind Band Sort'
+
+	/// Technical sort order for Wind Band
+	column 'Wind Band Sort' =
+			IF(
+				NOT(fact_energy_weather[Has_Weather]) || ISBLANK(fact_energy_weather[Avg_Wind_Speed]),
+				4,
+				SWITCH(
+					TRUE(),
+					fact_energy_weather[Avg_Wind_Speed] < 15, 1,
+					fact_energy_weather[Avg_Wind_Speed] < 30, 2,
+					3
+				)
+			)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34000000-0000-4000-8000-000000000021
+		summarizeBy: none
+
+	partition fact_energy_weather = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "gold_energy_weather.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					RemovedLatLon = Table.RemoveColumns(Promoted, {"Latitude", "Longitude"}, MissingField.Ignore),
+					ChangedType = Table.TransformColumnTypes(RemovedLatLon, {
+						{"Date", type date},
+						{"State", type text},
+						{"Daily_Energy_MU", type number},
+						{"Peak_Met_MW", type number},
+						{"Peak_Unmet_MW", type number},
+						{"Avg_Temperature", type number},
+						{"Max_Temperature", type number},
+						{"Min_Temperature", type number},
+						{"Total_Precipitation", type number},
+						{"Avg_Wind_Speed", type number},
+						{"Has_Weather", type logical},
+						{"Year", Int64.Type},
+						{"Month", Int64.Type},
+						{"Quarter", Int64.Type}
+					}, "en-US")
+				in
+					ChangedType
+

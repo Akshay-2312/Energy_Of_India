@@ -1,0 +1,50 @@
+relationship 22222222-2222-4222-8222-000000000001
+	fromColumn: fact_energy_weather.Date
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000002
+	fromColumn: fact_weather.Date
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000003
+	fromColumn: fact_national_daily.Date
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000004
+	fromColumn: gold_monthly_summary.Month_Start
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000005
+	fromColumn: gold_state_monthly_summary.Month_Start
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000006
+	fromColumn: silver_missing_date_audit.Date
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000007
+	fromColumn: gold_non_state_entities.Date
+	toColumn: dim_date.Date
+
+relationship 22222222-2222-4222-8222-000000000008
+	fromColumn: fact_energy_weather.State
+	toColumn: dim_state.State
+
+relationship 22222222-2222-4222-8222-000000000009
+	fromColumn: fact_weather.State
+	toColumn: dim_state.State
+
+relationship 22222222-2222-4222-8222-000000000010
+	fromColumn: gold_state_monthly_summary.State
+	toColumn: dim_state.State
+
+relationship 1cb09942-77fa-4516-9cd8-c0cedfd9beb0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: silver_entity_coverage.First_Date
+	toColumn: LocalDateTable_40e52621-959a-4686-8fe7-d8439d643ca2.Date
+
+relationship b7c71ea8-eed2-41a9-a5e5-c51872363782
+	joinOnDateBehavior: datePartOnly
+	fromColumn: silver_entity_coverage.Last_Date
+	toColumn: LocalDateTable_978d3634-19b1-462d-9ae8-f0cddf432f78.Date
+

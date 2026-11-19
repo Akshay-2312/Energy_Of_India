@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Clear All (State Explorer)",
+  "name": "clear_all_explorer",
+  "options": {
+    "targetVisualNames": [],
+    "suppressDisplay": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "state_explorer",
+    "sections": {
+      "overview": {
+        "visualContainers": {}
+      },
+      "weather_demand": {
+        "visualContainers": {}
+      },
+      "state_explorer": {
+        "visualContainers": {}
+      },
+      "state_detail": {
+        "visualContainers": {}
+      },
+      "unmet_peak": {
+        "visualContainers": {}
+      },
+      "data_quality": {
+        "visualContainers": {}
+      }
+    }
+  }
+}

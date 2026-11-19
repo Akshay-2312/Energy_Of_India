@@ -1,0 +1,31 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DataFolder","dim_state","fact_energy_weather","fact_weather","fact_national_daily","gold_monthly_summary","gold_state_monthly_summary","silver_missing_date_audit","silver_entity_coverage","gold_non_state_entities"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_date
+ref table dim_state
+ref table fact_energy_weather
+ref table fact_weather
+ref table fact_national_daily
+ref table gold_monthly_summary
+ref table gold_state_monthly_summary
+ref table silver_missing_date_audit
+ref table silver_entity_coverage
+ref table gold_non_state_entities
+ref table 'Weather Driver'
+ref table Metric
+ref table _Measures
+ref table DateTableTemplate_36758e1f-1f14-461c-a982-a930afdb9b9d
+ref table LocalDateTable_40e52621-959a-4686-8fe7-d8439d643ca2
+ref table LocalDateTable_978d3634-19b1-462d-9ae8-f0cddf432f78
+

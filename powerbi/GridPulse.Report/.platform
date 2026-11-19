@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "GridPulse"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9c3f1d4e-7b21-4a8e-91c2-5e8b7a4c2d10"
+  }
+}

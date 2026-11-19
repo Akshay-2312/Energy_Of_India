@@ -1,0 +1,37 @@
+/// Disconnected parameter table for switching the active weather driver in scatter and trend visuals.
+table 'Weather Driver'
+	lineageTag: 32000000-0000-4000-8000-000000000001
+
+	/// Weather driver name (Avg temperature, Max temperature, Rainfall, Wind)
+	column Driver
+		dataType: string
+		lineageTag: 32000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Driver]
+		sortByColumn: DriverOrder
+
+	/// Technical sort order for Weather Driver
+	column DriverOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 32000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DriverOrder]
+
+	partition 'Weather Driver' = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"Driver", STRING,
+					"DriverOrder", INTEGER,
+					{
+						{"Avg temperature", 1},
+						{"Max temperature", 2},
+						{"Rainfall", 3},
+						{"Wind", 4}
+					}
+				)
+

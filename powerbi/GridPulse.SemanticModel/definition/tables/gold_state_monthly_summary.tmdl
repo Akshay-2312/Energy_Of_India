@@ -1,0 +1,174 @@
+/// Pre-aggregated monthly state-wise energy, peak met, peak unmet, and weather summary.
+table gold_state_monthly_summary
+	lineageTag: 38000000-0000-4000-8000-000000000001
+
+	/// State/UT name (hidden FK; joins dim_state[State])
+	column State
+		dataType: string
+		isHidden
+		lineageTag: 38000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: State
+
+	/// Technical calendar year (hidden; use dim_date[Year])
+	column Year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 38000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// Technical calendar month (hidden; use dim_date[MonthNumber])
+	column Month
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 38000000-0000-4000-8000-000000000004
+		summarizeBy: none
+		sourceColumn: Month
+
+	/// Monthly total energy met for the state (MU)
+	column Total_Energy_MU
+		dataType: double
+		formatString: #,##0.0
+		lineageTag: 38000000-0000-4000-8000-000000000005
+		summarizeBy: sum
+		sourceColumn: Total_Energy_MU
+
+	/// Monthly average daily energy met for the state (MU)
+	column Avg_Daily_Energy_MU
+		dataType: double
+		formatString: #,##0.0
+		lineageTag: 38000000-0000-4000-8000-000000000006
+		summarizeBy: average
+		sourceColumn: Avg_Daily_Energy_MU
+
+	/// Monthly average daily peak power met (MW)
+	column Avg_Peak_Met_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000007
+		summarizeBy: average
+		sourceColumn: Avg_Peak_Met_MW
+
+	/// Monthly maximum peak power met (MW)
+	column Max_Peak_Met_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000008
+		summarizeBy: max
+		sourceColumn: Max_Peak_Met_MW
+
+	/// Monthly average daily peak unmet demand (MW)
+	column Avg_Peak_Unmet_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000009
+		summarizeBy: average
+		sourceColumn: Avg_Peak_Unmet_MW
+
+	/// Monthly maximum peak unmet demand (MW)
+	column Max_Peak_Unmet_MW
+		dataType: double
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000010
+		summarizeBy: max
+		sourceColumn: Max_Peak_Unmet_MW
+
+	/// Number of days in the month with Peak_Unmet_MW > 0
+	column Unmet_Days
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000011
+		summarizeBy: sum
+		sourceColumn: Unmet_Days
+
+	/// Number of energy reporting days in the month
+	column Days_Reported
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000012
+		summarizeBy: sum
+		sourceColumn: Days_Reported
+
+	/// Monthly average mean temperature (deg C)
+	column Avg_Temperature
+		dataType: double
+		formatString: 0.0
+		lineageTag: 38000000-0000-4000-8000-000000000013
+		summarizeBy: average
+		sourceColumn: Avg_Temperature
+
+	/// Monthly maximum temperature (deg C)
+	column Max_Temperature
+		dataType: double
+		formatString: 0.0
+		lineageTag: 38000000-0000-4000-8000-000000000014
+		summarizeBy: max
+		sourceColumn: Max_Temperature
+
+	/// Monthly total precipitation (mm)
+	column Total_Precipitation
+		dataType: double
+		formatString: 0.0
+		lineageTag: 38000000-0000-4000-8000-000000000015
+		summarizeBy: sum
+		sourceColumn: Total_Precipitation
+
+	/// Monthly average wind speed (km/h)
+	column Avg_Wind_Speed
+		dataType: double
+		formatString: 0.0
+		lineageTag: 38000000-0000-4000-8000-000000000016
+		summarizeBy: average
+		sourceColumn: Avg_Wind_Speed
+
+	/// Number of days with weather data in the month
+	column Weather_Days
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 38000000-0000-4000-8000-000000000017
+		summarizeBy: sum
+		sourceColumn: Weather_Days
+
+	/// First day of month (hidden FK; joins dim_date[Date])
+	column Month_Start
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 38000000-0000-4000-8000-000000000018
+		summarizeBy: none
+		sourceColumn: Month_Start
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition gold_state_monthly_summary = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "gold_state_monthly_summary.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					ChangedType = Table.TransformColumnTypes(Promoted, {
+						{"State", type text},
+						{"Year", Int64.Type},
+						{"Month", Int64.Type},
+						{"Total_Energy_MU", type number},
+						{"Avg_Daily_Energy_MU", type number},
+						{"Avg_Peak_Met_MW", type number},
+						{"Max_Peak_Met_MW", type number},
+						{"Avg_Peak_Unmet_MW", type number},
+						{"Max_Peak_Unmet_MW", type number},
+						{"Unmet_Days", Int64.Type},
+						{"Days_Reported", Int64.Type},
+						{"Avg_Temperature", type number},
+						{"Max_Temperature", type number},
+						{"Total_Precipitation", type number},
+						{"Avg_Wind_Speed", type number},
+						{"Weather_Days", Int64.Type},
+						{"Month_Start", type date}
+					}, "en-US")
+				in
+					ChangedType
+

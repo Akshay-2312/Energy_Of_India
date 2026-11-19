@@ -1,0 +1,45 @@
+/// Calendar dates absent from the daily energy feed between 2013-01-01 and 2024-04-28 (Data Quality audit).
+table silver_missing_date_audit
+	lineageTag: 39000000-0000-4000-8000-000000000001
+
+	/// Missing calendar date
+	column Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 39000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Year of missing date
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 39000000-0000-4000-8000-000000000003
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// Month number of missing date
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 39000000-0000-4000-8000-000000000004
+		summarizeBy: none
+		sourceColumn: Month
+
+	partition silver_missing_date_audit = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "silver_missing_date_audit.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					ChangedType = Table.TransformColumnTypes(Promoted, {
+						{"Date", type date},
+						{"Year", Int64.Type},
+						{"Month", Int64.Type}
+					}, "en-US")
+				in
+					ChangedType
+

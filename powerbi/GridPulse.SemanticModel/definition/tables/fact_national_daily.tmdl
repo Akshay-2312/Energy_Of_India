@@ -1,0 +1,55 @@
+/// Authoritative national daily totals from Zenodo source Total column (one row per Date). Used when no location filter is active.
+table fact_national_daily
+	lineageTag: 36000000-0000-4000-8000-000000000001
+
+	/// Reporting date (hidden FK; slice via dim_date[Date])
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 36000000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// National daily energy met (MU)
+	column Daily_Energy_Total
+		dataType: double
+		formatString: #,##0.0
+		lineageTag: 36000000-0000-4000-8000-000000000003
+		summarizeBy: sum
+		sourceColumn: Daily_Energy_Total
+
+	/// National daily peak power demand met (MW)
+	column Peak_Energy_Total
+		dataType: double
+		formatString: #,##0
+		lineageTag: 36000000-0000-4000-8000-000000000004
+		summarizeBy: max
+		sourceColumn: Peak_Energy_Total
+
+	/// National daily peak unmet demand (MW)
+	column Unmet_Energy_Total
+		dataType: double
+		formatString: #,##0
+		lineageTag: 36000000-0000-4000-8000-000000000005
+		summarizeBy: max
+		sourceColumn: Unmet_Energy_Total
+
+	partition fact_national_daily = m
+		mode: import
+		source =
+				let
+					Folder = if Text.EndsWith(DataFolder, "\") then DataFolder else DataFolder & "\",
+					Source = Csv.Document(File.Contents(Folder & "gold_national_daily.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					ChangedType = Table.TransformColumnTypes(Promoted, {
+						{"Date", type date},
+						{"Daily_Energy_Total", type number},
+						{"Peak_Energy_Total", type number},
+						{"Unmet_Energy_Total", type number}
+					}, "en-US")
+				in
+					ChangedType
+

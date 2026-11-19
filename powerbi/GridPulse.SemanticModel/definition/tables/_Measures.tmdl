@@ -1,0 +1,393 @@
+/// Centralized measure display table for all GridPulse India KPIs, weather analytics, dynamic choosers, and report metadata.
+table _Measures
+	lineageTag: 40000000-0000-4000-8000-000000000001
+
+	/// Total electricity consumption met (MU). Uses authoritative fact_national_daily when All India is unfiltered; uses fact_energy_weather when a location or weather-band filter is active.
+	measure 'Total Energy (MU)' =
+			IF(
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				SUM('fact_energy_weather'[Daily_Energy_MU]),
+				SUM('fact_national_daily'[Daily_Energy_Total])
+			)
+		formatString: #,##0.0
+		displayFolder: Energy & Demand
+		lineageTag: 40000000-0000-4000-8000-000000000002
+
+	/// Average daily electricity consumption met (MU) across reported days in the current filter context.
+	measure 'Avg Daily Energy (MU)' =
+			VAR UseStateGrain =
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band])
+			RETURN
+				IF(
+					UseStateGrain,
+					DIVIDE(
+						SUM('fact_energy_weather'[Daily_Energy_MU]),
+						CALCULATE(
+							DISTINCTCOUNT('fact_energy_weather'[Date]),
+							NOT(ISBLANK('fact_energy_weather'[Daily_Energy_MU]))
+						)
+					),
+					AVERAGE('fact_national_daily'[Daily_Energy_Total])
+				)
+		formatString: #,##0.0
+		displayFolder: Energy & Demand
+		lineageTag: 40000000-0000-4000-8000-000000000003
+
+	/// Maximum daily peak power demand met (MW) in the current filter context.
+	measure 'Peak Demand Met (MW)' =
+			IF(
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				MAX('fact_energy_weather'[Peak_Met_MW]),
+				MAX('fact_national_daily'[Peak_Energy_Total])
+			)
+		formatString: #,##0
+		displayFolder: Energy & Demand
+		lineageTag: 40000000-0000-4000-8000-000000000004
+
+	/// Maximum daily peak unmet power demand / grid deficit (MW) in the current filter context.
+	measure 'Peak Unmet (MW)' =
+			IF(
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				MAX('fact_energy_weather'[Peak_Unmet_MW]),
+				MAX('fact_national_daily'[Unmet_Energy_Total])
+			)
+		formatString: #,##0
+		displayFolder: Unmet & Deficit
+		lineageTag: 40000000-0000-4000-8000-000000000005
+
+	/// Count of distinct reporting days with positive unmet peak demand (> 0 MW).
+	measure 'Unmet Days' =
+			IF(
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				CALCULATE(
+					DISTINCTCOUNT('fact_energy_weather'[Date]),
+					'fact_energy_weather'[Peak_Unmet_MW] > 0
+				),
+				CALCULATE(
+					COUNTROWS('fact_national_daily'),
+					'fact_national_daily'[Unmet_Energy_Total] > 0
+				)
+			)
+		formatString: #,##0
+		displayFolder: Unmet & Deficit
+		lineageTag: 40000000-0000-4000-8000-000000000006
+
+	/// Grid deficit share: sum of unmet MW divided by total peak demand (Peak Met + Peak Unmet MW) across days in context.
+	measure 'Unmet % of Demand' =
+			VAR UseStateGrain =
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band])
+			VAR UnmetMW =
+				IF(
+					UseStateGrain,
+					SUM('fact_energy_weather'[Peak_Unmet_MW]),
+					SUM('fact_national_daily'[Unmet_Energy_Total])
+				)
+			VAR MetMW =
+				IF(
+					UseStateGrain,
+					SUM('fact_energy_weather'[Peak_Met_MW]),
+					SUM('fact_national_daily'[Peak_Energy_Total])
+				)
+			RETURN
+				DIVIDE(UnmetMW, MetMW + UnmetMW)
+		formatString: 0.00%
+		displayFolder: Unmet & Deficit
+		lineageTag: 40000000-0000-4000-8000-000000000007
+
+	/// Year-over-Year % change in Total Energy (MU), matched to the active data date bounds so partial years (e.g. 2024 through Apr 28) compare like-for-like.
+	measure 'Energy YoY %' =
+			VAR UseStateGrain =
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band])
+			VAR Curr = [Total Energy (MU)]
+			VAR MaxFactDate =
+				IF(
+					UseStateGrain,
+					CALCULATE(MAX('fact_energy_weather'[Date]), NOT(ISBLANK('fact_energy_weather'[Daily_Energy_MU]))),
+					CALCULATE(MAX('fact_national_daily'[Date]), NOT(ISBLANK('fact_national_daily'[Daily_Energy_Total])))
+				)
+			VAR Prev =
+				IF(
+					NOT(ISBLANK(MaxFactDate)),
+					CALCULATE(
+						[Total Energy (MU)],
+						FILTER(
+							DATEADD('dim_date'[Date], -1, YEAR),
+							'dim_date'[Date] <= EDATE(MaxFactDate, -12)
+						)
+					)
+				)
+			RETURN
+				IF(
+					NOT(ISBLANK(Curr)) && NOT(ISBLANK(Prev)) && Prev <> 0,
+					DIVIDE(Curr - Prev, Prev)
+				)
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 40000000-0000-4000-8000-000000000008
+
+	/// Average daily mean temperature (deg C) across Open-Meteo records (2022-01-01 onward; all 36 states/UTs).
+	measure 'Avg Temperature (C)' =
+			IF(
+				ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				AVERAGE('fact_energy_weather'[Avg_Temperature]),
+				AVERAGE('fact_weather'[Avg_Temperature])
+			)
+		formatString: 0.0
+		displayFolder: Weather
+		lineageTag: 40000000-0000-4000-8000-000000000009
+
+	/// Maximum daily high temperature (deg C) across Open-Meteo records (2022-01-01 onward).
+	measure 'Max Temperature (C)' =
+			IF(
+				ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				MAX('fact_energy_weather'[Max_Temperature]),
+				MAX('fact_weather'[Max_Temperature])
+			)
+		formatString: 0.0
+		displayFolder: Weather
+		lineageTag: 40000000-0000-4000-8000-000000000010
+
+	/// Total accumulated precipitation (mm) across Open-Meteo records (2022-01-01 onward).
+	measure 'Total Rainfall (mm)' =
+			IF(
+				ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				SUM('fact_energy_weather'[Total_Precipitation]),
+				SUM('fact_weather'[Total_Precipitation])
+			)
+		formatString: #,##0.0
+		displayFolder: Weather
+		lineageTag: 40000000-0000-4000-8000-000000000011
+
+	/// Average daily maximum wind speed at 10m (km/h) across Open-Meteo records (2022-01-01 onward).
+	measure 'Avg Wind Speed (kmh)' =
+			IF(
+				ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				AVERAGE('fact_energy_weather'[Avg_Wind_Speed]),
+				AVERAGE('fact_weather'[Avg_Wind_Speed])
+			)
+		formatString: 0.0
+		displayFolder: Weather
+		lineageTag: 40000000-0000-4000-8000-000000000012
+
+	/// Count of distinct days where daily Avg_Temperature >= 30 deg C (Hot or Extreme temperature band).
+	measure 'Hot Days' =
+			IF(
+				ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				CALCULATE(
+					DISTINCTCOUNT('fact_energy_weather'[Date]),
+					'fact_energy_weather'[Avg_Temperature] >= 30
+				),
+				CALCULATE(
+					DISTINCTCOUNT('fact_weather'[Date]),
+					'fact_weather'[Avg_Temperature] >= 30
+				)
+			)
+		formatString: #,##0
+		displayFolder: Weather
+		lineageTag: 40000000-0000-4000-8000-000000000013
+
+	/// Dynamic weather measure controlled by the 'Weather Driver'[Driver] slicer (Avg temperature, Max temperature, Rainfall, Wind).
+	measure 'Selected Driver Value' =
+			SWITCH(
+				SELECTEDVALUE('Weather Driver'[Driver], "Avg temperature"),
+				"Avg temperature", [Avg Temperature (C)],
+				"Max temperature", [Max Temperature (C)],
+				"Rainfall", [Total Rainfall (mm)],
+				"Wind", [Avg Wind Speed (kmh)],
+				[Avg Temperature (C)]
+			)
+		formatString: #,##0.0
+		displayFolder: Dynamic Choosers
+		lineageTag: 40000000-0000-4000-8000-000000000014
+
+	/// Dynamic energy/demand measure controlled by the Metric[Metric] slicer (Energy, Peak met, Peak unmet).
+	measure 'Selected Metric Value' =
+			SWITCH(
+				SELECTEDVALUE('Metric'[Metric], "Energy"),
+				"Energy", [Total Energy (MU)],
+				"Peak met", [Peak Demand Met (MW)],
+				"Peak unmet", [Peak Unmet (MW)],
+				[Total Energy (MU)]
+			)
+		formatString: #,##0.0
+		displayFolder: Dynamic Choosers
+		lineageTag: 40000000-0000-4000-8000-000000000015
+
+	/// Active Weather Driver label for dynamic visual titles.
+	measure 'Selected Driver Label' = SELECTEDVALUE('Weather Driver'[Driver], "Avg temperature")
+		displayFolder: Dynamic Choosers
+		lineageTag: 40000000-0000-4000-8000-000000000016
+
+	/// Active Metric label for dynamic visual titles.
+	measure 'Selected Metric Label' = SELECTEDVALUE('Metric'[Metric], "Energy")
+		displayFolder: Dynamic Choosers
+		lineageTag: 40000000-0000-4000-8000-000000000017
+
+	/// Dynamic page header context string showing active location and date window (e.g. "All India | 2013-01-01 to 2024-04-28").
+	measure 'Header Context' =
+			VAR StateCount = COUNTROWS(VALUES('dim_state'[State]))
+			VAR RegionCount = COUNTROWS(VALUES('dim_state'[Region]))
+			VAR LocLabel =
+				SWITCH(
+					TRUE(),
+					ISFILTERED('dim_state'[City]) && HASONEVALUE('dim_state'[City]) && HASONEVALUE('dim_state'[State]),
+						SELECTEDVALUE('dim_state'[State]) & " (" & SELECTEDVALUE('dim_state'[City]) & ")",
+					ISFILTERED('dim_state'[State]) && StateCount = 1,
+						SELECTEDVALUE('dim_state'[State]),
+					ISFILTERED('dim_state'[State]),
+						StateCount & " States",
+					ISFILTERED('dim_state'[Region]) && RegionCount = 1,
+						SELECTEDVALUE('dim_state'[Region]) & " Region",
+					ISFILTERED('dim_state'[Region]),
+						RegionCount & " Regions",
+					"All India"
+				)
+			VAR UseStateGrain =
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band])
+			VAR DataMin =
+				IF(
+					UseStateGrain,
+					COALESCE(MIN('fact_energy_weather'[Date]), MIN('fact_weather'[Date]), MIN('dim_date'[Date])),
+					COALESCE(MIN('fact_national_daily'[Date]), MIN('fact_weather'[Date]), MIN('dim_date'[Date]))
+				)
+			VAR DataMax =
+				IF(
+					UseStateGrain,
+					COALESCE(MAX('fact_energy_weather'[Date]), MAX('fact_weather'[Date]), MAX('dim_date'[Date])),
+					COALESCE(MAX('fact_national_daily'[Date]), MAX('fact_weather'[Date]), MAX('dim_date'[Date]))
+				)
+			RETURN
+				LocLabel & " | " & FORMAT(DataMin, "yyyy-MM-dd") & " to " & FORMAT(DataMax, "yyyy-MM-dd")
+		displayFolder: Report Metadata
+		lineageTag: 40000000-0000-4000-8000-000000000018
+
+	/// Most recent reporting date available in the active filter context.
+	measure 'Last Reported Date' =
+			IF(
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band]),
+				COALESCE(MAX('fact_energy_weather'[Date]), MAX('fact_weather'[Date])),
+				MAX('fact_national_daily'[Date])
+			)
+		formatString: yyyy-MM-dd
+		displayFolder: Report Metadata
+		lineageTag: 40000000-0000-4000-8000-000000000019
+
+	/// Percentage of calendar span days with reported electricity data in the active filter context.
+	measure 'Data Coverage %' =
+			VAR UseStateGrain =
+				ISFILTERED('dim_state'[Region])
+					|| ISFILTERED('dim_state'[State])
+					|| ISFILTERED('dim_state'[City])
+					|| ISFILTERED('fact_energy_weather'[Temperature Band])
+					|| ISFILTERED('fact_energy_weather'[Rainfall Band])
+					|| ISFILTERED('fact_energy_weather'[Wind Band])
+			VAR ReportedDays =
+				IF(
+					UseStateGrain,
+					CALCULATE(DISTINCTCOUNT('fact_energy_weather'[Date]), NOT(ISBLANK('fact_energy_weather'[Daily_Energy_MU]))),
+					CALCULATE(COUNTROWS('fact_national_daily'), NOT(ISBLANK('fact_national_daily'[Daily_Energy_Total])))
+				)
+			VAR MinD =
+				IF(
+					UseStateGrain,
+					CALCULATE(MIN('fact_energy_weather'[Date]), NOT(ISBLANK('fact_energy_weather'[Daily_Energy_MU]))),
+					CALCULATE(MIN('fact_national_daily'[Date]), NOT(ISBLANK('fact_national_daily'[Daily_Energy_Total])))
+				)
+			VAR MaxD =
+				IF(
+					UseStateGrain,
+					CALCULATE(MAX('fact_energy_weather'[Date]), NOT(ISBLANK('fact_energy_weather'[Daily_Energy_MU]))),
+					CALCULATE(MAX('fact_national_daily'[Date]), NOT(ISBLANK('fact_national_daily'[Daily_Energy_Total])))
+				)
+			VAR SpanDays = IF(NOT(ISBLANK(MinD)) && NOT(ISBLANK(MaxD)), DATEDIFF(MinD, MaxD, DAY) + 1)
+			RETURN
+				IF(
+					ISBLANK(SpanDays),
+					IF(UseStateGrain && COUNTROWS('dim_state') > 0, 0, BLANK()),
+					DIVIDE(ReportedDays, SpanDays)
+				)
+		formatString: 0.0%
+		displayFolder: Data Quality
+		lineageTag: 40000000-0000-4000-8000-000000000020
+
+	/// Count of missing calendar dates in the daily national energy feed within the active date filter.
+	measure 'Missing Dates Count' = COUNTROWS('silver_missing_date_audit')
+		formatString: #,##0
+		displayFolder: Data Quality
+		lineageTag: 40000000-0000-4000-8000-000000000021
+
+	/// Total energy (MU) reported by non-state utility/industrial entities (AMNSIL, Damodar Valley Corporation).
+	measure 'Non-State Utility Energy (MU)' = SUM('gold_non_state_entities'[Daily_Energy_MU])
+		formatString: #,##0.0
+		displayFolder: Data Quality
+		lineageTag: 40000000-0000-4000-8000-000000000022
+
+	/// Hidden technical placeholder column required for a calculated measure display table.
+	column Dummy
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 40000000-0000-4000-8000-000000000099
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Dummy]
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW("Dummy", 1)
+

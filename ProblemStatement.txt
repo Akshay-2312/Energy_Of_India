@@ -1,0 +1,18 @@
+Project Title
+GridPulse India: A Medallion Lakehouse Architecture for Weather-Driven Electricity Consumption, Peak Demand, and Grid Deficit Analytics
+
+Problem Statement
+1. Real-World Context
+Managing a large-scale national power grid requires balancing daily electricity consumption, sudden peak demand surges, and regional supply-demand deficits across diverse climatic zones. In India, daily electricity usage (measured in Million Units, MU), peak power met (Megawatts, MW), and unmet peak shortages (MW) fluctuate sharply across states and seasons. However, grid operators and energy planners frequently analyse consumption data in isolation from meteorological drivers—such as extreme temperatures, rainfall, and wind speeds—making it difficult to identify what triggers regional load spikes and supply shortfalls.
+
+
+
+2. The Data Engineering Challenge (Bronze & Silver Realities)
+
+Integrating multi-source national energy datasets (Zenodo daily energy, peak met, and peak unmet records) with state-level climate feeds (Open-Meteo weather data) introduces significant raw-data complexity that prevents direct business intelligence reporting:   Schema & Ingestion Friction: Raw CSV feeds stored in cloud volumes contain spaces and special characters in column headers that violate Delta Lake naming standards during automated streaming ingestion (cloudFiles).   Data Integrity & Redundancy: Raw energy and weather feeds contain duplicate rows and repeated date entries that would distort daily and monthly aggregations if left unfiltered.   Structural Sparsity & Reporting Gaps: Certain regions—specifically Andaman and Nicobar Islands and Lakshadweep—are completely unpopulated across the energy datasets, while other states and Union Territories (such as Telangana, Dadra and Nagar Haveli, Daman and Diu, and several southern states) exhibit intermittent missing-date ranges.   Mixed Entity Granularity: The wide-format state energy tables mix state/UT consumption with non-state industrial and utility entities (AMNSIL and Damodar Valley Corporation) alongside national Total columns, requiring careful separation before state-wise geospatial or weather joins can be performed accurately.   
+
+
+
+3. Project Objective
+
+This project engineers an end-to-end, three-layer Data Engineering pipeline using Python, Apache Spark, Databricks, and Delta Lake (Medallion Architecture):   Bronze Layer: Ingest raw multi-source energy and weather CSVs from Unity Catalog Volumes with initial schema sanitization.   Silver Layer: Perform systematic exploratory validation, drop completely empty regional columns, deduplicate records, audit missing-date anomalies, and standardize column names into clean Delta tables.   Gold Layer & Visualization: Transform wide state columns into normalized analytical tables, integrate state-level energy consumption with daily weather indicators, and compute monthly peak and unmet demand summaries to power an interactive Power BI dashboard.  

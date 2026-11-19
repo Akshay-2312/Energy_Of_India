@@ -1,0 +1,22 @@
+# Power BI Desktop local user caches & runtime locks
+powerbi/**/.pbi/cache.abf
+powerbi/**/.pbi/localSettings.json
+powerbi/**/.pbi/editorSettings.json
+*.pbix.tmp
+*.json.bak
+
+# Python / PySpark local environments & bytecode
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+derby.log
+metastore_db/
+spark-warehouse/
+
+# OS & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
